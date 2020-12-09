@@ -1,0 +1,231 @@
+<?xml version='1.0'?>
+<sdf version='1.4'>
+    <model name="crawler">
+
+        <plugin name="gz_crawler_plugin" filename="libcrawler_plugin.so"/>
+        <static>false</static>
+        <link name='chassis'>
+            <pose>0 0 .1 0 0 0</pose>
+
+            <sensor type="camera" name="camera1">
+                <pose>0.1 0 0.15 0 0 0</pose>
+                <update_rate>5.0</update_rate>
+                <camera name="head">
+                    <horizontal_fov>1.3962634</horizontal_fov>
+                    <image>
+                        <width>256</width>
+                        <height>256</height>
+                        <format>R8G8B8</format>
+                    </image>
+                    <clip>
+                        <near>0.02</near>
+                        <far>300</far>
+                    </clip>
+                    <noise>
+                        <type>gaussian</type>
+                        <!-- Noise is sampled independently per pixel on each frame.  That pixel's noise value is added to each of its color channels, which at that point lie in the range [0,1]. -->
+                        <mean>0.0</mean>
+                        <stddev>0.007</stddev>
+                    </noise>
+                </camera>
+                <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                    <alwaysOn>true</alwaysOn>
+                    <updateRate>5.0</updateRate>
+                    <robotNamespace></robotNamespace>
+                    <cameraName>camera1</cameraName>
+                    <imageTopicName>image_raw</imageTopicName>
+                    <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+                    <frameName>camera_link</frameName>
+                    <hackBaseline>0.07</hackBaseline>
+                    <distortionK1>0.0</distortionK1>
+                    <distortionK2>0.0</distortionK2>
+                    <distortionK3>0.0</distortionK3>
+                    <distortionT1>0.0</distortionT1>
+                    <distortionT2>0.0</distortionT2>
+                </plugin>
+            </sensor>
+            <!-- <gravity>true</gravity>  -->
+            <sensor name="imu_sensor" type="imu">
+                <always_on>true</always_on>
+                <update_rate>20</update_rate>
+                <visualize>true</visualize>
+                <topic>__default_topic__</topic>
+                <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+                    <topicName>imu</topicName>
+                    <bodyName>chassis</bodyName>
+                    <updateRateHZ>10.0</updateRateHZ>
+                    <gaussianNoise>0.0</gaussianNoise>
+                    <xyzOffset>0 0 0</xyzOffset>
+                    <rpyOffset>0 0 0</rpyOffset>
+                    <frameName>chassis</frameName>
+                </plugin>
+                <pose>0 0 0 0 0 0</pose>
+            </sensor>
+            <inertial>
+                <mass>2.5</mass>
+                <inertia>
+                    <ixx>10.0</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>10.0</iyy>
+                    <iyz>0</iyz>
+                    <izz>2.5</izz>
+                </inertia>
+            </inertial>
+            <collision name='collision'>
+                <geometry>
+                    <box>
+                        <size>.3 .2 .1</size>
+                    </box>
+                </geometry>
+            </collision>
+
+            <visual name="visual">
+                <pose>0.05 0 0  -1.5707 0 -1.5707</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://Crawler/Altiscan2t.dae</uri>
+                    </mesh>
+                </geometry>
+            </visual>
+
+            <collision name='caster_collision'>
+                <pose>-0.15 0 -0.05 0 0 0</pose>
+                <geometry>
+                    <sphere>
+                        <radius>.05</radius>
+                    </sphere>
+                </geometry>
+
+                <surface>
+                    <friction>
+                        <ode>
+                            <mu>0.01</mu>
+                            <mu2>0.01</mu2>
+                            <slip1>1.0</slip1>
+                            <slip2>1.0</slip2>
+                        </ode>
+                    </friction>
+                    <bounce>
+                        <restitution_coefficient>0</restitution_coefficient>
+                        <threshold>0</threshold>
+                    </bounce>
+                    <contact>
+                        <ode>
+                            <max_vel>0</max_vel>
+                            <min_depth>0.005</min_depth>
+                        </ode>
+                    </contact>
+                </surface>
+            </collision>
+
+        </link>
+        <link name="left_wheel">
+            <pose>0.1 0.13 0.1 0 1.5707 1.5707</pose>
+            <inertial>
+                <mass>0.5</mass>
+            </inertial>
+            <collision name="collision">
+                <geometry>
+                    <cylinder>
+                        <radius>.1</radius>
+                        <length>.05</length>
+                    </cylinder>
+                </geometry>
+                <surface>
+                    <friction>
+                        <ode>
+                            <mu>1</mu>
+                            <mu2>1</mu2>
+                            <slip1>0.0</slip1>
+                            <slip2>0.0</slip2>
+                        </ode>
+                    </friction>
+                    <bounce>
+                        <restitution_coefficient>0</restitution_coefficient>
+                        <threshold>0</threshold>
+                    </bounce>
+                    <contact>
+                        <ode>
+                            <max_vel>0</max_vel>
+                            <min_depth>0.005</min_depth>
+                        </ode>
+                    </contact>
+                </surface> 
+            </collision>
+        </link>
+
+        <link name="right_wheel">
+            <pose>0.1 -0.13 0.1 0 1.5707 1.5707</pose>
+            <inertial>
+                <mass>0.5</mass>
+            </inertial>
+            <collision name="collision">
+                <geometry>
+                    <cylinder>
+                        <radius>.1</radius>
+                        <length>.05</length>
+                    </cylinder>
+                </geometry>
+                <surface>
+                    <friction>
+                        <ode>
+                            <mu>1</mu>
+                            <mu2>1</mu2>
+                            <slip1>0.0</slip1>
+                            <slip2>0.0</slip2>
+                        </ode>
+                    </friction>
+                    <bounce>
+                        <restitution_coefficient>0</restitution_coefficient>
+                        <threshold>0</threshold>
+                    </bounce>
+                    <contact>
+                        <ode>
+                            <max_vel>0</max_vel>
+                            <min_depth>0.005</min_depth>
+                        </ode>
+                    </contact>
+                </surface> 
+            </collision>
+
+        </link>
+        <joint type="revolute" name="left_wheel_hinge">
+            <pose>0 0 -0.03 0 0 0</pose>
+            <child>left_wheel</child>
+            <parent>chassis</parent>
+            <axis>
+                <xyz>0 1 0</xyz>
+            </axis>
+        </joint>
+
+        <joint type="revolute" name="right_wheel_hinge">
+            <pose>0 0 0.03 0 0 0</pose>
+            <child>right_wheel</child>
+            <parent>chassis</parent>
+            <axis>
+                <xyz>0 1 0</xyz>
+            </axis>
+        </joint>
+        <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+            <alwaysOn>true</alwaysOn>
+            <updateRate>20</updateRate>
+            <leftJoint>left_wheel_hinge</leftJoint>
+            <rightJoint>right_wheel_hinge</rightJoint>
+            <wheelSeparation>0.26</wheelSeparation>
+            <wheelDiameter>0.1</wheelDiameter>
+            <wheelTorque>20</wheelTorque>
+            <wheelAcceleration>1.0</wheelAcceleration>
+            <commandTopic>cmd_vel</commandTopic>
+            <!--odometrySource>1</odometrySource-->
+            <odometryTopic>odom</odometryTopic>
+            <odometryFrame>odom</odometryFrame>
+            <publishOdomTf>true</publishOdomTf>
+            <publishWheelTf>false</publishWheelTf>
+            <publishWheelJointState>true</publishWheelJointState>
+            <robotBaseFrame>base_link</robotBaseFrame>
+	    <legacyMode>false</legacyMode>
+        </plugin>
+
+    </model>
+</sdf>

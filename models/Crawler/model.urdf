@@ -1,0 +1,124 @@
+<?xml version="1.0" ?>
+<robot name="crawler">
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
+    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>20</updateRate>
+        <leftJoint>crawler__left_wheel_hinge</leftJoint>
+        <rightJoint>crawler__right_wheel_hinge</rightJoint>
+        <wheelSeparation>0.26</wheelSeparation>
+        <wheelDiameter>0.1</wheelDiameter>
+        <wheelTorque>20</wheelTorque>
+        <wheelAcceleration>5</wheelAcceleration>
+        <commandTopic>cmd_vel</commandTopic>
+        <!--<odometrySource>1</odometrySource>-->
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>odom</odometryFrame>
+        <publishOdomTf>true</publishOdomTf>
+        <publishWheelTf>false</publishWheelTf>
+        <publishWheelJointState>true</publishWheelJointState>
+        <robotBaseFrame>base_footprint</robotBaseFrame>
+    </plugin>
+
+    <joint name="crawler__left_wheel_hinge" type="fixed">
+        <parent link="crawler__chassis"/>
+        <child link="crawler__left_wheel"/>
+        <origin rpy="0      1.5707  1.5707" xyz="0.09999  0.1      0.09999"/>
+        <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00"/>
+        <limit effort="0" lower="0" upper="0" velocity="0"/>
+    </joint>
+    <joint name="crawler__right_wheel_hinge" type="fixed">
+        <parent link="crawler__chassis"/>
+        <child link="crawler__right_wheel"/>
+        <origin rpy="0      1.5707  1.5707" xyz="0.1 -0.1  0.1"/>
+        <axis xyz="9.00000000e-05   9.00000000e-05   1.00000000e+00"/>
+        <limit effort="0" lower="0" upper="0" velocity="0"/>
+    </joint>
+    <link name="crawler__chassis">
+        <inertial>
+            <mass value="2.5"/>
+            <origin rpy="0  0  0" xyz="0  0  0"/>
+            <inertia ixx="10.0" ixy="0" ixz="0" iyy="10.0" iyz="0" izz="2.5"/>
+        </inertial>
+        <collision name="crawler__collision">
+            <origin rpy="0  0  0" xyz="0   0   0.1"/>
+            <geometry>
+                <box size=".4 .2 .1"/>
+            </geometry>
+        </collision>
+        <collision name="crawler__caster_collision">
+            <origin rpy="0  0  0" xyz="-0.15  0    0.05"/>
+            <geometry>
+                <sphere radius=".05"/>
+            </geometry>
+        </collision>
+        <visual name="crawler__visual">
+            <origin rpy="0  0  0" xyz="0   0   0.1"/>
+            <geometry>
+                <box size=".4 .2 .1"/>
+            </geometry>
+        </visual>
+        <visual name="crawler__visual_head">
+            <origin rpy="0  0  0" xyz="0.1    0     0.175"/>
+            <geometry>
+                <box size=".05 .05 .05"/>
+            </geometry>
+        </visual>
+        <visual name="crawler__caster_visual">
+            <origin rpy="0  0  0" xyz="-0.15  0    0.05"/>
+            <geometry>
+                <sphere radius=".05"/>
+            </geometry>
+        </visual>
+    </link>
+    <link name="crawler__left_wheel">
+        <inertial>
+            <mass value="0.5"/>
+            <origin rpy="0  0  0" xyz="0  0  0"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+        <collision name="crawler__collision">
+            <origin rpy="0  0  0" xyz="0    0    0.03"/>
+            <geometry>
+                <cylinder length=".05" radius=".1"/>
+            </geometry>
+        </collision>
+        <visual name="crawler__visual">
+            <origin rpy="0  0  0" xyz="0    0    0.03"/>
+            <geometry>
+                <cylinder length=".05" radius=".1"/>
+            </geometry>
+        </visual>
+        <visual name="crawler__visualdot">
+            <origin rpy="0  0  0" xyz="0.05  0    0.06"/>
+            <geometry>
+                <cylinder length=".01" radius=".02"/>
+            </geometry>
+        </visual>
+    </link>
+    <link name="crawler__right_wheel">
+        <inertial>
+            <mass value="0.5"/>
+            <origin rpy="0  0  0" xyz="0  0  0"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+        <collision name="crawler__collision">
+            <origin rpy="0  0  0" xyz="0    0   -0.03"/>
+            <geometry>
+                <cylinder length=".05" radius=".1"/>
+            </geometry>
+        </collision>
+        <visual name="crawler__visual">
+            <origin rpy="0  0  0" xyz="0    0   -0.03"/>
+            <geometry>
+                <cylinder length=".05" radius=".1"/>
+            </geometry>
+        </visual>
+        <visual name="crawler__visualdot">
+            <origin rpy="0  0  0" xyz="0.05  0   -0.06"/>
+            <geometry>
+                <cylinder length=".01" radius=".02"/>
+            </geometry>
+        </visual>
+    </link>
+</robot>

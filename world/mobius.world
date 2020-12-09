@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<sdf version="1.4">
+    <world name="default">
+        <include>
+            <uri>model://sun</uri>
+        </include>
+        <include>
+            <uri>model://Mobius</uri>
+        </include> 
+        <include>
+            <uri>model://Crawler</uri>
+        </include>
+
+        <plugin name="mobius_gazebo_plugin" filename="libmobius_gazebo_plugin.so"/>
+    </world>
+</sdf>
